@@ -23,7 +23,6 @@ public class Weather extends AppCompatActivity implements View.OnClickListener{
     String url;
     String test;
     JSONArray jsonForecast;
-    ForeCast foreCast;
     TextView epochdate;
     TextView tvmaxtemp;
     TextView tvmintemp;
@@ -60,29 +59,38 @@ public class Weather extends AppCompatActivity implements View.OnClickListener{
     }
 
     public void OnLoadComplete (){
-        JSONObject object = new JSONObject();
+        /*JSONObject object = new JSONObject();
         JSONObject object1 = new JSONObject();
         String s = new String();
         long epochdat = 0;
-        Date date;
+
 
         try {
             object = jsonForecast.getJSONObject(0);
             object1 = object.getJSONObject("Headline");
             s = object1.getString("EffectiveEpochDate").toString();
-            //epochdat = object1.getLong("EffectiveEpochDate");
+            epochdat = object1.getLong("EffectiveEpochDate");
         }
         catch (Exception e) {
             e.printStackTrace();
             Log.d("myLogs", "json convert fail" + e.getMessage());
         }
-        Log.d("myLogs", "OnLoadComplete: " + object.toString());
+        Log.d("myLogs", "OnLoadComplete: " + object.toString());*/
+
+        Date date;
+
+        ForeCast foreCast;
+        foreCast = new ForeCast();
+        foreCast = foreCast.parse(jsonForecast);
+        Log.d("myLogs", "forecast edat " + foreCast.getEpochdate());
 
         epochdate = findViewById(R.id.tv_epochdate);
 
-        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss");
-        //date = new Date(epochdat);
+        /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        date = new Date(foreCast.getEpochdate());
+        String df = simpleDateFormat.format(date);
+        epochdate.setText(df);*/
 
-        //epochdate.setText(date.toString());
+
     }
 }

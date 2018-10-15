@@ -1,9 +1,9 @@
 package com.example.destr.weather20;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class ForeCast {
 
@@ -31,25 +31,26 @@ public class ForeCast {
 
     public int getNight_icon() {return night_icon;}
 
-    public ForeCast parse(JSONArray jsonArray, int i) {
+    public ForeCast parse(JSONArray jsonArray) {
 
-        ForeCast forecast;
         JSONObject jsonObject;
+        ForeCast forecast;
         long edate;
         int min_temp;
         int max_temp;
         int day_icon;
         int night_icon;
 
-        forecast = null;
+        forecast = new ForeCast();
 
         try {
-            jsonObject = jsonArray.getJSONObject(i);
-            edate = jsonObject.getLong("EpochDate");
-            min_temp = jsonObject.getJSONObject("Temperature").getJSONObject("Minimum").getInt("Value");
-            max_temp = jsonObject.getJSONObject("Temperature").getJSONObject("Maximum").getInt("Value");
-            day_icon = jsonObject.getJSONObject("Day").getInt("Icon");
-            night_icon = jsonObject.getJSONObject("Night").getInt("Icon");
+            jsonObject = jsonArray.getJSONObject(0);
+            edate = jsonObject.getJSONObject("Headline").getLong("EffectiveEpochDate");
+            min_temp = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getInt("Value");
+            max_temp = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getInt("Value");
+            day_icon = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Day").getInt("Icon");
+            night_icon = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Night").getInt("Icon");
+            Log.d("myLogs", "icons: " + day_icon + " " + night_icon);
             forecast.init(edate, min_temp, max_temp, day_icon, night_icon);
         } catch (Exception e) {e.printStackTrace();}
         return forecast;
