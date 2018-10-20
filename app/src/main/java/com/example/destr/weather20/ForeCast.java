@@ -50,8 +50,9 @@ public class ForeCast {
             max_temp = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getInt("Value");
             day_icon = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Day").getInt("Icon");
             night_icon = jsonObject.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Night").getInt("Icon");
-            Log.d("myLogs", "icons: " + day_icon + " " + night_icon);
+            //Log.d("myLogs", "icons: " + day_icon + " " + night_icon);
             forecast.init(edate, min_temp, max_temp, day_icon, night_icon);
+            //Log.d("myLogs", "edat in forecast " + forecast.getEpochdate());
         } catch (Exception e) {e.printStackTrace();}
         return forecast;
     }

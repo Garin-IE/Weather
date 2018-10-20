@@ -59,7 +59,7 @@ public class CityAutoCompleteAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List<City> citys = findCitys(constraint.toString() /*"Ивант"*/); //загрузка данных
+                    List<City> citys = findCitys(constraint.toString()); //загрузка данных
                     filterResults.values = citys;
                     filterResults.count = citys.size();
                 }
@@ -88,15 +88,29 @@ public class CityAutoCompleteAdapter extends BaseAdapter implements Filterable {
         loader = new DataLoader(new DataLoader.IDataResult() {
             @Override
             public void result(JSONArray res0) {
-                mResults.clear();
-                for (int i = 0; i < res0.length(); i++){
-                    mResults.add(CityParser.parse(res0, i));
+                /*mResults.clear();
+                try {
+                    for (int i = 0; i < res0.length(); i++) {
+                        mResults.add(CityParser.parse(res0, i));
+                    }
+                    notifyDataSetChanged();
                 }
-                notifyDataSetChanged();
+                catch (Exception e) {e.printStackTrace();}*/
+                OnLoadComplete(res0);
             }
         });
         loader.execute(url);
         return mResults;
     }
 
+    public void OnLoadComplete (JSONArray res) {
+        mResults.clear();
+        try {
+            for (int i = 0; i < res.length(); i++) {
+                mResults.add(CityParser.parse(res, i));
+                notifyDataSetChanged();
+            }
+        }
+        catch (Exception e) {e.printStackTrace();}
+    }
 }
