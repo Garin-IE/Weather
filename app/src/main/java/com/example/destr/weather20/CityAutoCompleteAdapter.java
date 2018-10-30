@@ -88,14 +88,6 @@ public class CityAutoCompleteAdapter extends BaseAdapter implements Filterable {
         loader = new DataLoader(new DataLoader.IDataResult() {
             @Override
             public void result(JSONArray res0) {
-                /*mResults.clear();
-                try {
-                    for (int i = 0; i < res0.length(); i++) {
-                        mResults.add(CityParser.parse(res0, i));
-                    }
-                    notifyDataSetChanged();
-                }
-                catch (Exception e) {e.printStackTrace();}*/
                 OnLoadComplete(res0);
             }
         });

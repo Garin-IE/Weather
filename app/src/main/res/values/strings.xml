@@ -3,4 +3,5 @@
     <string name="AC_base_url">http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=</string>
     <string name="forecast_base_url">http://dataservice.accuweather.com/forecasts/v1/daily/1day/</string>
     <string name="api_key">ky2tYbbH4avGJKev9jSA2NlyiAfLSH8T</string>
+    <string name="opt_days">Кол-во Дней</string>
 </resources>

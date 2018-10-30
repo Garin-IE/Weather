@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CityParser {
-    public JSONArray jsonArray;
 
     public static City parse(JSONArray jsonArray, Integer i) {
         JSONObject jsonObject;
