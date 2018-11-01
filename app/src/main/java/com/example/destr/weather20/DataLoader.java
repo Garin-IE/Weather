@@ -43,7 +43,6 @@ public class DataLoader extends AsyncTask<String, Void, JSONArray> {
                 while ((line = reader.readLine()) != null){
                     builder.append(line);
                 }
-                //Log.d("myLogs", "doInBackground: dataloader" + builder.charAt(0));
                 Log.d("myLogs", "boolean " + (builder.charAt(0) == ja_att));
                 if (builder.charAt(0) == ja_att){
                     jsonArray = new JSONArray(builder.toString());
