@@ -59,7 +59,6 @@ public class DataLoader extends AsyncTask<String, Void, JSONArray> {
             }
             else {
                 Log.d("myLogs", "Http Error: "+ response);
-                //Toast.makeText(this, response, Toast.LENGTH_LONG).show();
                 return null;
             }
         }

@@ -80,7 +80,6 @@ public class CityAutoCompleteAdapter extends BaseAdapter implements Filterable {
         return filter;
     }
 
-    // сюда обработчик загрузки данных!!!
     private List<City> findCitys(String cityName) {
         String url = mContext.getString(R.string.AC_base_url) + mContext.getString(R.string.api_key) + "&q=" + cityName + "&language=ru-ru";
 

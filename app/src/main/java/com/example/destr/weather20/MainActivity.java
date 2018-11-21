@@ -3,6 +3,7 @@ package com.example.destr.weather20;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,7 +19,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -32,15 +35,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int days_count = 1;
     String geolocation_url =
             "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search";
-    //JSONObject jsonObject_gpsResult;
-    MenuItem gpsItem;
     LocationManager locationManager;
     Boolean gpsflag = false;
+    private SharedPreferences mSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSettings = getSharedPreferences(getString(R.string.APP_PREFERENCES), Context.MODE_PRIVATE);
 
         final DelayAutoCompleteTextView cityName = findViewById(R.id.cityname);
         cityName.setThreshold(4);
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> adapterview, View view, int position, long id) {
                 city = (City) adapterview.getItemAtPosition(position);
-                cityName.setText(city.getName());
+                cityName.setText(city.getName(), false);
                 InputMethodManager imm =
                         (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOK.setOnClickListener(this);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        gpsItem = findViewById(R.id.menu_gps);
+
     }
 
     @Override
@@ -81,6 +85,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        if (mSettings.contains(getString(R.string.DAYS_PREFERENCE)) & mSettings.contains(getString(R.string.GPS_PREFERENCE))) {
+            menu.findItem(R.id.menu_gps).setChecked(mSettings.getBoolean(getString(R.string.GPS_PREFERENCE), false));
+            switch (mSettings.getInt(getString(R.string.DAYS_PREFERENCE),1)){
+                case 1: menu.findItem(R.id.days_1).setChecked(true); break;
+                case 5: menu.findItem(R.id.days_5).setChecked(true); break;
+                case 10: menu.findItem(R.id.days_10).setChecked(true); break;
+                case 15: menu.findItem(R.id.days_15).setChecked(true); break;
+            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -140,6 +153,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else ActivityCompat.requestPermissions(this,
                 new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        if (mSettings.contains(getString(R.string.DAYS_PREFERENCE)) & mSettings.contains(getString(R.string.GPS_PREFERENCE))) {
+            gpsflag = mSettings.getBoolean(getString(R.string.GPS_PREFERENCE), false);
+            days_count = mSettings.getInt(getString(R.string.DAYS_PREFERENCE),1);
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putBoolean(getString(R.string.GPS_PREFERENCE), gpsflag);
+        editor.putInt(getString(R.string.DAYS_PREFERENCE), days_count);
+        editor.apply();
     }
 
     private LocationListener locationListener = new LocationListener() {
@@ -198,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         catch (Exception e) {e.printStackTrace();}
         Log.d("myLogs", city.getAaname() +" "+city.getName()+" "+city.getKey());
         final DelayAutoCompleteTextView cityName = findViewById(R.id.cityname);
-        cityName.setText(city.getName());
+        cityName.setText(city.getName(), false);
         return city;
     }
 }
